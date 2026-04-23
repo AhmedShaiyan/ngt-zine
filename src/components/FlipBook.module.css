@@ -1,0 +1,285 @@
+/* ── Book container ───────────────────────────────────────────────────────── */
+.book {
+  --bw: min(2240px, 92vw, calc((100vh - 10rem) / 0.6786));
+  --bh: calc(var(--bw) * 0.6786); /* 760 / 1120 */
+
+  position: relative;
+  width: var(--bw);
+  height: var(--bh);
+  perspective: 1400px;
+  perspective-origin: 50% 45%;
+  filter: drop-shadow(0 2px 4px rgba(44, 40, 37, 0.18))
+    drop-shadow(0 28px 52px rgba(44, 40, 37, 0.32));
+}
+
+/* ── Spreads ──────────────────────────────────────────────────────────────── */
+.spread {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  overflow: hidden;
+}
+
+.spread > * {
+  flex: 0 0 50%;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Single-page cover: centred within the full book frame */
+.spreadCover {
+  position: absolute;
+  top: 0;
+  left: 25%;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ── Turning leaf ─────────────────────────────────────────────────────────── */
+.leaf {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  transform-style: preserve-3d;
+  z-index: 2;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* Forward: starts on the right, rotates left around the spine */
+.leafR {
+  left: 50%;
+  transform-origin: left center;
+}
+
+/* Backward: starts on the left, rotates right around the spine */
+.leafL {
+  left: 0;
+  transform-origin: right center;
+}
+
+.leafR.leafFlip {
+  animation: flipFwd var(--anim, 860ms) forwards;
+}
+
+.leafL.leafFlip {
+  animation: flipBwd var(--anim, 860ms) forwards;
+}
+
+/*
+ * Two-phase easing:
+ *   0 → 50%  ease-in  — page lifts and gains speed
+ *   50 → 100% ease-out — page decelerates and settles
+ *
+ * The page is exactly at 90° (edge-on, invisible) at the 50% keyframe.
+ */
+@keyframes flipFwd {
+  0% {
+    transform: rotateY(0deg);
+    animation-timing-function: cubic-bezier(0.46, 0.00, 0.70, 0.10);
+  }
+  50% {
+    transform: rotateY(-90deg);
+    animation-timing-function: cubic-bezier(0.30, 0.90, 0.54, 1.00);
+  }
+  100% {
+    transform: rotateY(-180deg);
+  }
+}
+
+@keyframes flipBwd {
+  0% {
+    transform: rotateY(0deg);
+    animation-timing-function: cubic-bezier(0.46, 0.00, 0.70, 0.10);
+  }
+  50% {
+    transform: rotateY(90deg);
+    animation-timing-function: cubic-bezier(0.30, 0.90, 0.54, 1.00);
+  }
+  100% {
+    transform: rotateY(180deg);
+  }
+}
+
+/* ── Leaf faces ───────────────────────────────────────────────────────────── */
+.leafFront,
+.leafBack {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.leafBack {
+  transform: rotateY(180deg);
+}
+
+/* ── Simulated paper-curve light sweep (::before on each face) ────────────
+ *
+ * Real paper catches light differently across its curved surface as it flips.
+ * A highlight strip sweeping from the lift edge to the landing edge creates
+ * this illusion without any geometry deformation.
+ *
+ * The strip is 70% wide and moves across the full face during the animation.
+ * ─────────────────────────────────────────────────────────────────────────── */
+.leafFront::before,
+.leafBack::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 252, 246, 0.06) 30%,
+    rgba(255, 252, 246, 0.22) 50%,
+    rgba(255, 252, 246, 0.06) 70%,
+    transparent 100%
+  );
+  background-size: 70% 100%;
+  background-repeat: no-repeat;
+  background-position: 200% 0;  /* starts off-screen right */
+  opacity: 0;
+}
+
+/* Front face: highlight sweeps right → left as page lifts and turns */
+.leafR.leafFlip .leafFront::before {
+  animation: sweepFront var(--anim, 860ms) forwards;
+}
+
+/* Back face: highlight appears from left as page lands */
+.leafR.leafFlip .leafBack::before {
+  animation: sweepBack var(--anim, 860ms) forwards;
+}
+
+.leafL.leafFlip .leafFront::before {
+  animation: sweepFrontBwd var(--anim, 860ms) forwards;
+}
+
+.leafL.leafFlip .leafBack::before {
+  animation: sweepBackBwd var(--anim, 860ms) forwards;
+}
+
+@keyframes sweepFront {
+  0%   { background-position: 160% 0; opacity: 0; }
+  10%  { opacity: 1; }
+  50%  { background-position: 20% 0; opacity: 0.9; }
+  80%  { background-position: -60% 0; opacity: 0; }
+  100% { background-position: -100% 0; opacity: 0; }
+}
+
+@keyframes sweepBack {
+  0%   { background-position: 160% 0; opacity: 0; }
+  50%  { background-position: 160% 0; opacity: 0; }
+  55%  { opacity: 0.7; }
+  80%  { background-position: 40% 0; opacity: 1; }
+  90%  { opacity: 0.5; }
+  100% { background-position: -20% 0; opacity: 0; }
+}
+
+@keyframes sweepFrontBwd {
+  0%   { background-position: -60% 0; opacity: 0; }
+  10%  { opacity: 1; }
+  50%  { background-position: 80% 0; opacity: 0.9; }
+  80%  { background-position: 160% 0; opacity: 0; }
+  100% { background-position: 200% 0; opacity: 0; }
+}
+
+@keyframes sweepBackBwd {
+  0%   { background-position: -60% 0; opacity: 0; }
+  50%  { background-position: -60% 0; opacity: 0; }
+  55%  { opacity: 0.7; }
+  80%  { background-position: 60% 0; opacity: 1; }
+  90%  { opacity: 0.5; }
+  100% { background-position: 140% 0; opacity: 0; }
+}
+
+/* ── Fold-shadow overlays (::after on each face) ─────────────────────────── */
+.leafFront::after,
+.leafBack::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 52px;
+  pointer-events: none;
+  z-index: 9;
+}
+
+/* Front face of right-leaf: spine is on the LEFT edge */
+.leafR .leafFront::after {
+  left: 0;
+  background: linear-gradient(
+    to right,
+    rgba(44, 40, 37, 0.42) 0%,
+    rgba(255, 252, 246, 0.14) 22%,
+    rgba(44, 40, 37, 0.07) 50%,
+    transparent 100%
+  );
+}
+
+/* Back face of right-leaf: after landing on the left, spine is on the RIGHT */
+.leafR .leafBack::after {
+  right: 0;
+  background: linear-gradient(
+    to left,
+    rgba(44, 40, 37, 0.42) 0%,
+    rgba(255, 252, 246, 0.14) 22%,
+    rgba(44, 40, 37, 0.07) 50%,
+    transparent 100%
+  );
+}
+
+.leafL .leafFront::after {
+  right: 0;
+  background: linear-gradient(
+    to left,
+    rgba(44, 40, 37, 0.42) 0%,
+    rgba(255, 252, 246, 0.14) 22%,
+    rgba(44, 40, 37, 0.07) 50%,
+    transparent 100%
+  );
+}
+
+.leafL .leafBack::after {
+  left: 0;
+  background: linear-gradient(
+    to right,
+    rgba(44, 40, 37, 0.42) 0%,
+    rgba(255, 252, 246, 0.14) 22%,
+    rgba(44, 40, 37, 0.07) 50%,
+    transparent 100%
+  );
+}
+
+/* ── Centre spine shadow ─────────────────────────────────────────────────── */
+.spine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(44, 40, 37, 0.10) 28%,
+    rgba(44, 40, 37, 0.28) 46%,
+    rgba(44, 40, 37, 0.28) 54%,
+    rgba(44, 40, 37, 0.10) 72%,
+    transparent 100%
+  );
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .book {
+    --bw: 98vw;
+  }
+}

@@ -1,0 +1,31 @@
+.wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--font-sans);
+  font-size: var(--text-caption);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.num {
+  letter-spacing: var(--tracking-wide);
+}
+
+.bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.tick {
+  width: 14px;
+  height: 1px;
+  background: var(--color-rule);
+  transition: background var(--fade-med), height var(--fade-med);
+}
+
+.active {
+  background: var(--color-accent);
+  height: 2px;
+}

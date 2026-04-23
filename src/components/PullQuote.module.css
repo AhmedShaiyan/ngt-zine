@@ -1,0 +1,25 @@
+.quote {
+  margin: var(--space-5) 0;
+  padding: var(--space-3) 0 var(--space-3) var(--space-4);
+  border-left: 2px solid var(--color-accent);
+}
+
+.text {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--text-pullquote);
+  line-height: var(--leading-tight);
+  color: var(--color-text);
+  margin: 0;
+}
+
+.cite {
+  display: block;
+  margin-top: var(--space-3);
+  font-family: var(--font-sans);
+  font-size: var(--text-caption);
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  color: var(--color-text-muted);
+}
