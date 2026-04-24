@@ -20,19 +20,19 @@ export const spreads: SpreadDef[] = [
   },
   {
     id: 'intro',
-    narration: '/media/NGT1.mp3',
+    narration: '/media/audio1.mp3',
     Left: IntroLeft,
     Right: IntroRight,
   },
   {
     id: 'spread-02',
-    narration: '/media/NGT2.mp3',
+    narration: '/media/audio2.mp3',
     Left: Spread02Left,
     Right: Spread02Right,
   },
   {
     id: 'spread-03',
-    narration: '/media/NGT3.mp3',
+    narration: '/media/audio3.mp3',
     Left: Spread03Left,
     Right: Spread03Right,
   },
