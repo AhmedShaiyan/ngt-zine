@@ -63,14 +63,11 @@ export function useSoundtrack(src: string | undefined, muted: boolean) {
     if (muted) {
       fadeTo(audio, 0);
     } else {
-      // Attempt play on every unmute — this runs inside a user-gesture event
-      // (mute button click), so the browser allows it even before nav unlock.
-      audio.play().then(() => {
-        unlockedRef.current = true;
-        fadeTo(audio, VOLUME);
-      }).catch(() => {
-        // Autoplay still blocked; nav-click unlock() will handle first play.
-      });
+      // Only resume if already unlocked via a nav click; otherwise unlock()
+      // will handle first play. This prevents non-deterministic autoplay on mount.
+      if (!unlockedRef.current) return;
+      if (audio.paused) audio.play().catch(() => {});
+      fadeTo(audio, VOLUME);
     }
 
     return cancelFade;

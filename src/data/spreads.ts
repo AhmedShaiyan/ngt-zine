@@ -38,31 +38,37 @@ export const spreads: SpreadDef[] = [
   },
   {
     id: 'spread-04',
+    narration: '/media/NGT4.mp3',
     Left: Spread04Left,
     Right: Spread04Right,
   },
   {
     id: 'spread-05',
+    narration: '/media/NGT5.mp3',
     Left: Spread05Left,
     Right: Spread05Right,
   },
   {
     id: 'spread-06',
+    narration: '/media/NGT6.mp3',
     Left: Spread06Left,
     Right: Spread06Right,
   },
   {
     id: 'spread-07',
+    narration: '/media/NGT7.mp3',
     Left: Spread07Left,
     Right: Spread07Right,
   },
   {
     id: 'spread-08',
+    narration: '/media/NGT8.mp3',
     Left: Spread08Left,
     Right: Spread08Right,
   },
   {
     id: 'spread-09',
+    narration: '/media/NGT9.mp3',
     Left: Spread09Left,
     Right: Spread09Right,
   },
