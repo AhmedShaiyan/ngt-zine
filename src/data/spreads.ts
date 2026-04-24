@@ -9,7 +9,6 @@ import { Spread07Left, Spread07Right } from '../spreads/Spread07';
 import { Spread08Left, Spread08Right } from '../spreads/Spread08';
 import { Spread09Left, Spread09Right } from '../spreads/Spread09';
 import { Spread10Left, Spread10Right } from '../spreads/Spread10';
-import { Spread11Left, Spread11Right } from '../spreads/Spread11';
 import type { SpreadDef } from '../types';
 
 export const spreads: SpreadDef[] = [
@@ -72,10 +71,4 @@ export const spreads: SpreadDef[] = [
     Left: Spread10Left,
     Right: Spread10Right,
   },
-  {
-    id: 'spread-11',
-    Left: Spread11Left,
-    Right: Spread11Right,
-  },
-
 ];

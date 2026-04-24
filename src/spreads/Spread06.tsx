@@ -1,9 +1,17 @@
-import { SpreadPlaceholder } from '../components/SpreadPlaceholder';
+import styles from '../spreads/Intro.module.css';
 
 export function Spread06Left() {
-  return <SpreadPlaceholder label="Spread 06" side="Left" />;
+  return (
+    <div className={styles.canvaPage}>
+      <img src="/media/s6p1.png" alt="" className={styles.canvaImg} />
+    </div>
+  );
 }
 
 export function Spread06Right() {
-  return <SpreadPlaceholder label="Spread 06" side="Right" />;
+  return (
+    <div className={styles.canvaPage}>
+      <img src="/media/s6p2.png" alt="" className={styles.canvaImg} />
+    </div>
+  );
 }
